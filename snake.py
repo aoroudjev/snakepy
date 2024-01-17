@@ -1,8 +1,3 @@
-from typing import Tuple
-
-import pygame
-
-
 class Snake:
     def __init__(self, position: tuple):
         self.snake_list = [position]  # position format: (x, y)
@@ -14,8 +9,17 @@ class Snake:
     def update(self):
         head_x, head_y = self.snake_list[-1]
         if self.direction == "down":
-            self.snake_list.append((head_x, head_y))
-            self.snake_list.pop(-1)
+            self.snake_list.append((head_x, head_y + 1))
+            self.snake_list.pop(0)
+        if self.direction == "up":
+            self.snake_list.append((head_x, head_y - 1))
+            self.snake_list.pop(0)
+        if self.direction == "left":
+            self.snake_list.append((head_x - 1, head_y))
+            self.snake_list.pop(0)
+        if self.direction == "right":
+            self.snake_list.append((head_x + 1, head_y))
+            self.snake_list.pop(0)
 
     def grow(self):
         pass
