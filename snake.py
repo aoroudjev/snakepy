@@ -10,16 +10,13 @@ class Snake:
         head_x, head_y = self.snake_list[-1]
         if self.direction == "down":
             self.snake_list.append((head_x, head_y + 1))
-            self.snake_list.pop(0)
         if self.direction == "up":
             self.snake_list.append((head_x, head_y - 1))
-            self.snake_list.pop(0)
         if self.direction == "left":
             self.snake_list.append((head_x - 1, head_y))
-            self.snake_list.pop(0)
         if self.direction == "right":
             self.snake_list.append((head_x + 1, head_y))
-            self.snake_list.pop(0)
+        self.snake_list.pop(0)
 
     def grow(self):
         pass
