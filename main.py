@@ -16,7 +16,7 @@ def draw_grid() -> None:
             pygame.draw.rect(screen, "white", rect, 1)
 
 
-def draw_snake(snake: Snake):
+def draw_snake(snake: Snake) -> None:
     for snake_x, snake_y in snake.snake_list:
         snake_seg = pygame.Rect(snake_x * GRID_SQUARE_SIZE,
                                 snake_y * GRID_SQUARE_SIZE,
@@ -41,6 +41,7 @@ def main():
 
     snake = Snake(tuple(int((elem // GRID_SQUARE_SIZE) / 2) for elem in WINDOW_SIZE))
     last_time = pygame.time.get_ticks()
+    movement_made = False
 
     # Event loop
     while True:
@@ -48,24 +49,31 @@ def main():
         for event in pygame.event.get():
             if event.type == QUIT:
                 return
-            elif event.type == KEYDOWN:
+            elif event.type == KEYDOWN and not movement_made:
+                movement_made = True
                 if event.key == K_UP and snake.direction != 'down':
                     snake.set_direction('up')
-                if event.key == K_DOWN and snake.direction != 'up':
+                elif event.key == K_DOWN and snake.direction != 'up':
                     snake.set_direction('down')
-                if event.key == K_LEFT and snake.direction != 'right':
+                elif event.key == K_LEFT and snake.direction != 'right':
                     snake.set_direction('left')
-                if event.key == K_RIGHT and snake.direction != 'left':
+                elif event.key == K_RIGHT and snake.direction != 'left':
                     snake.set_direction('right')
+                else:
+                    movement_made = False
 
         print(f'head: {snake.snake_list}, direction: {snake.get_direction()}')
+
         # draw_grid()
         draw_snake(snake)
         pygame.display.update()
+
         current_time = pygame.time.get_ticks()
         if current_time - last_time > 100:
             snake.update()
             last_time = current_time
+            movement_made = False
+
         screen.fill('black')
 
 
