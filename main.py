@@ -45,7 +45,7 @@ def main():
 
     # Event loop
     while True:
-        clock.tick(60)
+        clock.tick(10)
         for event in pygame.event.get():
             if event.type == QUIT:
                 return
@@ -68,11 +68,8 @@ def main():
         draw_snake(snake)
         pygame.display.update()
 
-        current_time = pygame.time.get_ticks()
-        if current_time - last_time > 100:
-            snake.update()
-            last_time = current_time
-            movement_made = False
+        snake.update()
+        movement_made = False
 
         screen.fill('black')
 
