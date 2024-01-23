@@ -1,4 +1,7 @@
+from typing import Tuple
+
 import pygame
+import random
 from pygame.locals import *
 from snake import Snake
 
@@ -6,17 +9,24 @@ WINDOW_SIZE = (500, 500)
 GRID_SQUARE_SIZE = 20
 
 
-def draw_grid() -> None:
-    for x in range(0, WINDOW_SIZE[0] // GRID_SQUARE_SIZE):
-        for y in range(0, WINDOW_SIZE[1] // GRID_SQUARE_SIZE):
-            rect = pygame.Rect(x * GRID_SQUARE_SIZE,
-                               y * GRID_SQUARE_SIZE,
-                               GRID_SQUARE_SIZE,
-                               GRID_SQUARE_SIZE)
-            pygame.draw.rect(screen, "white", rect, 1)
+def set_fruit_coords(snake: Snake) -> Tuple[int, int]:
+    grid = [(i, j) for i in range(WINDOW_SIZE[0] // GRID_SQUARE_SIZE)
+            for j in range(WINDOW_SIZE[1] // GRID_SQUARE_SIZE)]
+    empty_coords = [coord for coord in grid if coord not in snake.snake_list]
+    fruit = random.choice(empty_coords)
+    return fruit
 
 
-def draw_snake(snake: Snake) -> None:
+def draw_fruit(screen, coords: Tuple[int, int]):
+    coord_x, coord_y = coords
+    fruit = pygame.Rect(coord_x * GRID_SQUARE_SIZE,
+                        coord_y * GRID_SQUARE_SIZE,
+                        GRID_SQUARE_SIZE,
+                        GRID_SQUARE_SIZE)
+    pygame.draw.rect(screen, "green", fruit)
+
+
+def draw_snake(screen, snake: Snake) -> None:
     for snake_x, snake_y in snake.snake_list:
         snake_seg = pygame.Rect(snake_x * GRID_SQUARE_SIZE,
                                 snake_y * GRID_SQUARE_SIZE,
@@ -27,7 +37,6 @@ def draw_snake(snake: Snake) -> None:
 
 def main():
     # Initialize screen
-    global screen, clock
     pygame.init()
     screen = pygame.display.set_mode(WINDOW_SIZE)
     pygame.display.set_caption('SnakePy')
@@ -40,7 +49,8 @@ def main():
     pygame.display.update()
 
     snake = Snake(tuple(int((elem // GRID_SQUARE_SIZE) / 2) for elem in WINDOW_SIZE))
-    last_time = pygame.time.get_ticks()
+    fruit = set_fruit_coords(snake)
+
     movement_made = False
 
     # Event loop
@@ -64,11 +74,13 @@ def main():
 
         print(f'head: {snake.snake_list}, direction: {snake.get_direction()}')
 
-        # draw_grid()
-        draw_snake(snake)
+        draw_snake(screen, snake)
+        draw_fruit(screen, fruit)
         pygame.display.update()
 
-        snake.update()
+        snake.update(fruit)
+        if snake.snake_list[-1] == fruit:
+            fruit = set_fruit_coords(snake)
         movement_made = False
 
         screen.fill('black')
