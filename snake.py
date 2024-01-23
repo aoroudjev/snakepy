@@ -1,25 +1,31 @@
+from collections import deque
+
+
 class Snake:
     def __init__(self, start_position: tuple):
-        self.snake_list = [start_position]  # position format: (x, y)
-        self.direction = ""
+        self.snake_list = deque([start_position])  # position format: (x, y)
+        self.direction = ''
         self.speed = 1
 
     def __len__(self):
         return len(self.snake_list)
 
-    def update(self):
+    def update(self, fruit_coords):
         head_x, head_y = self.snake_list[-1]
         if self.direction == "down":
-            self.snake_list.append((head_x, head_y + self.speed))
+            new_head = (head_x, head_y + self.speed)
         elif self.direction == "up":
-            self.snake_list.append((head_x, head_y - self.speed))
+            new_head = (head_x, head_y - self.speed)
         elif self.direction == "left":
-            self.snake_list.append((head_x - self.speed, head_y))
+            new_head = (head_x - self.speed, head_y)
         elif self.direction == "right":
-            self.snake_list.append((head_x + self.speed, head_y))
+            new_head = (head_x + self.speed, head_y)
         else:
             return
-        self.snake_list.pop(0)
+
+        self.snake_list.append(new_head)
+        if new_head != fruit_coords:
+            self.snake_list.popleft()
 
     def grow(self):
         pass
