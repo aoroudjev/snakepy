@@ -1,5 +1,3 @@
-from typing import Tuple
-
 import pygame
 import random
 from pygame.locals import *
@@ -9,7 +7,7 @@ WINDOW_SIZE = (500, 500)
 GRID_SQUARE_SIZE = 20
 
 
-def set_fruit_coords(snake: Snake) -> Tuple[int, int]:
+def set_fruit_coords(snake: Snake) -> tuple:
     grid = [(i, j) for i in range(WINDOW_SIZE[0] // GRID_SQUARE_SIZE)
             for j in range(WINDOW_SIZE[1] // GRID_SQUARE_SIZE)]
     empty_coords = [coord for coord in grid if coord not in snake.snake_list]
@@ -17,7 +15,7 @@ def set_fruit_coords(snake: Snake) -> Tuple[int, int]:
     return fruit
 
 
-def draw_fruit(screen: pygame.display, coords: Tuple[int, int]):
+def draw_fruit(screen: pygame.display, coords: tuple):
     coord_x, coord_y = coords
     fruit = pygame.Rect(coord_x * GRID_SQUARE_SIZE,
                         coord_y * GRID_SQUARE_SIZE,
@@ -50,7 +48,7 @@ def main():
     clock = pygame.time.Clock()
     pygame.display.update()
 
-    snake = Snake(tuple(int((elem // GRID_SQUARE_SIZE) / 2) for elem in WINDOW_SIZE))
+    snake = Snake(tuple(int(x/2) for x in WINDOW_SIZE))
     fruit = set_fruit_coords(snake)
 
     movement_made = False
@@ -92,7 +90,7 @@ def main():
 
         if game_over:
             game_over_message = font.render('Game Over', True, (255, 255, 0))
-            screen.blit(game_over_message, (WINDOW_SIZE[0] // 2 - 50, WINDOW_SIZE[1] // 2))
+            screen.blit(game_over_message, tuple((x/2 for x in WINDOW_SIZE)))
             pygame.display.update()
             pygame.time.wait(2000)
             return
