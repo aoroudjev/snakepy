@@ -40,6 +40,8 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode(WINDOW_SIZE)
     pygame.display.set_caption('SnakePy')
+    font = pygame.font.SysFont(None, 24)
+    img = font.render('hello', True, (255, 255, 255))
 
     background = pygame.Surface(screen.get_size())
     background = background.convert()
@@ -52,8 +54,9 @@ def main():
     fruit = set_fruit_coords(snake)
 
     movement_made = False
-
+    game_over = False
     # Event loop
+
     while True:
         clock.tick(10)
         for event in pygame.event.get():
@@ -72,8 +75,6 @@ def main():
                 else:
                     movement_made = False
 
-        print(f'head: {snake.snake_list}, direction: {snake.get_direction()}')
-
         draw_snake(screen, snake)
         draw_fruit(screen, fruit)
         pygame.display.update()
@@ -81,8 +82,22 @@ def main():
         snake.update(fruit)
         if snake.snake_list[-1] == fruit:
             fruit = set_fruit_coords(snake)
-        movement_made = False
+        head_x, head_y = snake.snake_list[-1]
 
+        if (head_x < 0 or head_y < 0 or
+                head_x >= WINDOW_SIZE[0] // GRID_SQUARE_SIZE or
+                head_y >= WINDOW_SIZE[1] // GRID_SQUARE_SIZE or
+                snake.check_collision_with_self()):
+            game_over = True
+
+        if game_over:
+            game_over_message = font.render('Game Over', True, (255, 255, 255))
+            screen.blit(game_over_message, (WINDOW_SIZE[0] // 2 - 50, WINDOW_SIZE[1] // 2))
+            pygame.display.update()
+            pygame.time.wait(2000)  # Wait for 2 seconds
+            return
+
+        movement_made = False
         screen.fill('black')
 
 
