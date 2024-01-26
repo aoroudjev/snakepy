@@ -10,6 +10,10 @@ class Snake:
     def __len__(self):
         return len(self.snake_list)
 
+    def check_collision_with_self(self):
+        head = self.snake_list[-1]
+        return head in list(self.snake_list)[:-1]
+
     def update(self, fruit_coords):
         head_x, head_y = self.snake_list[-1]
         if self.direction == "down":
@@ -26,9 +30,6 @@ class Snake:
         self.snake_list.append(new_head)
         if new_head != fruit_coords:
             self.snake_list.popleft()
-
-    def grow(self):
-        pass
 
     def set_direction(self, direction):
         self.direction = direction
