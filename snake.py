@@ -1,4 +1,5 @@
 from collections import deque
+from typing import Tuple
 
 
 class Snake:
@@ -10,7 +11,11 @@ class Snake:
     def __len__(self):
         return len(self.snake_list)
 
-    def update(self, fruit_coords):
+    def check_collision_with_self(self) -> bool:
+        head = self.snake_list[-1]
+        return head in list(self.snake_list)[:-1]
+
+    def update(self, fruit_coords: tuple) -> None:
         head_x, head_y = self.snake_list[-1]
         if self.direction == "down":
             new_head = (head_x, head_y + self.speed)
@@ -27,10 +32,7 @@ class Snake:
         if new_head != fruit_coords:
             self.snake_list.popleft()
 
-    def grow(self):
-        pass
-
-    def set_direction(self, direction):
+    def set_direction(self, direction: str) -> None:
         self.direction = direction
 
     def get_direction(self):
