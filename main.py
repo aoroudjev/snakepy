@@ -17,7 +17,7 @@ def set_fruit_coords(snake: Snake) -> Tuple[int, int]:
     return fruit
 
 
-def draw_fruit(screen, coords: Tuple[int, int]):
+def draw_fruit(screen: pygame.display, coords: Tuple[int, int]):
     coord_x, coord_y = coords
     fruit = pygame.Rect(coord_x * GRID_SQUARE_SIZE,
                         coord_y * GRID_SQUARE_SIZE,
@@ -26,7 +26,7 @@ def draw_fruit(screen, coords: Tuple[int, int]):
     pygame.draw.rect(screen, "green", fruit)
 
 
-def draw_snake(screen, snake: Snake) -> None:
+def draw_snake(screen: pygame.display, snake: Snake) -> None:
     for snake_x, snake_y in snake.snake_list:
         snake_seg = pygame.Rect(snake_x * GRID_SQUARE_SIZE,
                                 snake_y * GRID_SQUARE_SIZE,
@@ -40,7 +40,7 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode(WINDOW_SIZE)
     pygame.display.set_caption('SnakePy')
-    font = pygame.font.SysFont(None, 24)
+    font = pygame.font.SysFont("Roboto", 24)
     img = font.render('hello', True, (255, 255, 255))
 
     background = pygame.Surface(screen.get_size())
@@ -82,8 +82,8 @@ def main():
         snake.update(fruit)
         if snake.snake_list[-1] == fruit:
             fruit = set_fruit_coords(snake)
-        head_x, head_y = snake.snake_list[-1]
 
+        head_x, head_y = snake.snake_list[-1]
         if (head_x < 0 or head_y < 0 or
                 head_x >= WINDOW_SIZE[0] // GRID_SQUARE_SIZE or
                 head_y >= WINDOW_SIZE[1] // GRID_SQUARE_SIZE or
@@ -91,10 +91,10 @@ def main():
             game_over = True
 
         if game_over:
-            game_over_message = font.render('Game Over', True, (255, 255, 255))
+            game_over_message = font.render('Game Over', True, (255, 255, 0))
             screen.blit(game_over_message, (WINDOW_SIZE[0] // 2 - 50, WINDOW_SIZE[1] // 2))
             pygame.display.update()
-            pygame.time.wait(2000)  # Wait for 2 seconds
+            pygame.time.wait(2000)
             return
 
         movement_made = False
