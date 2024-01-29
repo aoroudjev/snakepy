@@ -48,7 +48,7 @@ def main():
     clock = pygame.time.Clock()
     pygame.display.update()
 
-    snake = Snake(tuple(int(x/2) for x in WINDOW_SIZE))
+    snake = Snake(tuple(int((x//GRID_SQUARE_SIZE)/2) for x in WINDOW_SIZE))
     fruit = set_fruit_coords(snake)
 
     movement_made = False
